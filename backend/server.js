@@ -27,6 +27,18 @@ app.use(morgan("dev"));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "UrbanKart backend is live",
+    health: "/api/health",
+    apiBase: "/api"
+  });
+});
+
+app.get("/healthz", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.get("/api/health", (req, res) => {
   res.status(200).json({ message: "UrbanKart API is running" });
 });
