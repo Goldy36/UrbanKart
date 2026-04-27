@@ -10,6 +10,9 @@ const ProtectedRoute = ({ children, roles = [] }) => {
   }
 
   if (roles.length > 0 && !roles.includes(user?.role)) {
+    if (roles.includes("seller") && user?.role === "buyer") {
+      return <Navigate to="/become-seller" state={{ from: location }} replace />;
+    }
     return <Navigate to="/" replace />;
   }
 

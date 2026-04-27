@@ -5,7 +5,10 @@ const sanitizeUser = (user) => ({
   id: user._id,
   name: user.name,
   email: user.email,
-  role: user.role
+  role: user.role,
+  storeName: user.storeName || "",
+  phone: user.phone || "",
+  address: user.address || ""
 });
 
 const normalizeText = (value) => (typeof value === "string" ? value.trim() : "");
@@ -14,9 +17,13 @@ const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const registerUser = async (req, res, next) => {
   try {
-    const { name, username, email, password, role } = req.body;
+    const { name, username, email, password, role, storeName, phone, address } = req.body;
     const normalizedName = normalizeText(name || username);
     const normalizedEmail = normalizeEmail(email);
+    const normalizedRole = role === "seller" ? "seller" : "buyer";
+    const normalizedStoreName = normalizeText(storeName);
+    const normalizedPhone = normalizeText(phone);
+    const normalizedAddress = normalizeText(address);
 
     if (!normalizedName || !normalizedEmail || !password) {
       res.status(400);
@@ -26,6 +33,11 @@ const registerUser = async (req, res, next) => {
     if (password.length < 6) {
       res.status(400);
       throw new Error("Password must be at least 6 characters");
+    }
+
+    if (normalizedRole === "seller" && (!normalizedStoreName || !normalizedPhone)) {
+      res.status(400);
+      throw new Error("Store name and phone are required for seller accounts");
     }
 
     const existingUser = await User.findOne({ email: normalizedEmail });
@@ -38,7 +50,10 @@ const registerUser = async (req, res, next) => {
       name: normalizedName,
       email: normalizedEmail,
       password,
-      role: role === "seller" ? "seller" : "buyer"
+      role: normalizedRole,
+      storeName: normalizedRole === "seller" ? normalizedStoreName : "",
+      phone: normalizedRole === "seller" ? normalizedPhone : "",
+      address: normalizedRole === "seller" ? normalizedAddress : ""
     });
 
     return res.status(201).json({
@@ -100,4 +115,37 @@ const getCurrentUser = async (req, res) => {
   return res.status(200).json({ user: req.user });
 };
 
-module.exports = { registerUser, loginUser, getCurrentUser };
+const becomeSeller = async (req, res, next) => {
+  try {
+    const { storeName, phone, address } = req.body;
+    const normalizedStoreName = normalizeText(storeName);
+    const normalizedPhone = normalizeText(phone);
+    const normalizedAddress = normalizeText(address);
+
+    if (!normalizedStoreName || !normalizedPhone) {
+      res.status(400);
+      throw new Error("Store name and phone are required");
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    user.role = "seller";
+    user.storeName = normalizedStoreName;
+    user.phone = normalizedPhone;
+    user.address = normalizedAddress;
+    await user.save();
+
+    return res.status(200).json({
+      message: "Seller account activated successfully",
+      user: sanitizeUser(user)
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = { registerUser, loginUser, getCurrentUser, becomeSeller };

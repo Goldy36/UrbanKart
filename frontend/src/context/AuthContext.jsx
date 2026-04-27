@@ -66,6 +66,11 @@ export const AuthProvider = ({ children }) => {
     setAuth({ token: "", user: null });
   };
 
+  const updateUser = (nextUser) => {
+    localStorage.setItem("urbankart_user", JSON.stringify(nextUser));
+    setAuth((prev) => ({ ...prev, user: nextUser }));
+  };
+
   const value = useMemo(
     () => ({
       user: auth.user,
@@ -74,7 +79,8 @@ export const AuthProvider = ({ children }) => {
       loading,
       login,
       register,
-      logout
+      logout,
+      updateUser
     }),
     [auth, loading]
   );

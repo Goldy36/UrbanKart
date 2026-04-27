@@ -152,6 +152,9 @@ const SellerDashboard = () => {
       ) : products.length === 0 ? (
         <div className="empty-state">
           <p>You have not listed any products yet.</p>
+          <Link to="/seller/add-product" className="btn-primary">
+            Add your first product
+          </Link>
         </div>
       ) : (
         <div className="dashboard-grid">

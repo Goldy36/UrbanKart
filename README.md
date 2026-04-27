@@ -157,7 +157,7 @@ npm install
 
 Create `.env` from `.env.example`:
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5000
 ```
 
 Run frontend:
@@ -197,7 +197,7 @@ Backend recommended (for persistent image uploads):
 - `CLOUDINARY_FOLDER` (optional, default: `urbankart/products`)
 
 Frontend required:
-- `VITE_API_URL` (example: `https://your-backend.onrender.com/api`)
+- `VITE_API_URL` (example: `https://your-backend.onrender.com`)
 
 ### 4. Important deployment note for images
 - Without Cloudinary env vars, local file uploads are stored on backend disk (`/uploads`) and may be lost on redeploy/restart.

@@ -1,7 +1,10 @@
 import axios from "axios";
 
+const rawApiUrl = (import.meta.env.VITE_API_URL || "").trim().replace(/\/$/, "");
+const SERVER_BASE_URL = rawApiUrl.replace(/\/api$/i, "");
+
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+  baseURL: `${SERVER_BASE_URL}/api`,
 });
 
 API.interceptors.request.use((config) => {
@@ -11,8 +14,6 @@ API.interceptors.request.use((config) => {
   }
   return config;
 });
-
-const SERVER_BASE_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 export const getImageUrl = (imagePath) => {
   if (!imagePath) return "";

@@ -24,6 +24,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["buyer", "seller"],
       default: "buyer"
+    },
+    storeName: {
+      type: String,
+      trim: true,
+      default: ""
+    },
+    phone: {
+      type: String,
+      trim: true,
+      default: ""
+    },
+    address: {
+      type: String,
+      trim: true,
+      default: ""
     }
   },
   { timestamps: true }

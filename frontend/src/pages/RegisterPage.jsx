@@ -10,7 +10,10 @@ const RegisterPage = () => {
     name: "",
     email: "",
     password: "",
-    role: "buyer"
+    role: "buyer",
+    storeName: "",
+    phone: "",
+    address: ""
   });
 
   const handleChange = (e) => {
@@ -71,6 +74,39 @@ const RegisterPage = () => {
           <option value="buyer">Buyer</option>
           <option value="seller">Seller</option>
         </select>
+
+        {formData.role === "seller" && (
+          <>
+            <label htmlFor="storeName">Store Name</label>
+            <input
+              id="storeName"
+              name="storeName"
+              type="text"
+              value={formData.storeName}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="phone">Phone Number</label>
+            <input
+              id="phone"
+              name="phone"
+              type="text"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="address">Business Address (Optional)</label>
+            <textarea
+              id="address"
+              name="address"
+              rows="3"
+              value={formData.address}
+              onChange={handleChange}
+            />
+          </>
+        )}
 
         <button type="submit" className="btn-primary" disabled={loading}>
           {loading ? "Creating Account..." : "Sign Up"}

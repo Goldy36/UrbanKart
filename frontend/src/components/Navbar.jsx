@@ -60,6 +60,7 @@ const Navbar = () => {
           )}
 
           {user?.role === "seller" && <NavLink to="/seller/dashboard">Dashboard</NavLink>}
+          {user?.role === "buyer" && <NavLink to="/become-seller">Sell on UrbanKart</NavLink>}
 
           {user?.role === "buyer" && (
             <>

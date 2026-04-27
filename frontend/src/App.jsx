@@ -13,6 +13,7 @@ import AddEditProductPage from "./pages/AddEditProductPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import OrdersPage from "./pages/OrdersPage";
+import BecomeSellerPage from "./pages/BecomeSellerPage";
 
 const NotFound = () => (
   <div className="container page-section">
@@ -31,6 +32,14 @@ function App() {
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/become-seller"
+            element={
+              <ProtectedRoute roles={["buyer"]}>
+                <BecomeSellerPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/cart"
